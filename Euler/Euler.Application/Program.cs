@@ -9,8 +9,9 @@ namespace Euler.Application
         {
             IProblem problem = new Problem1();
             IInterface userInterface = new ConsoleInterface();
-            IInput input = userInterface.PromptInput(problem.InputMessage, problem.Input);
-            IOutput output = problem.Solve(input);
+            userInterface.DisplayProblem(problem.ProblemMessage);
+            IDictionary<string, int> input = userInterface.PromptInput(problem.InputMessage, problem.Input);
+            IDictionary<string, int> output = problem.Solve(input);
             userInterface.DisplayOutput(problem.OutputMessage, output);
         }
     }

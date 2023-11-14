@@ -1,35 +1,79 @@
 ﻿using Euler.Domain;
-using System.Text;
 
 namespace Euler.Presentation
 {
     public class ConsoleInterface : IInterface
     {
-        public ConsoleInterface()
+        public ConsoleInterface() { }
+
+        public void DisplayProblem(string message)
         {
+            try
+            {
+                Console.WriteLine(message);
+                Console.WriteLine();
+            }
+            catch (Exception exception)
+            {
+                DisplayError(exception.Message);
+                throw;
+            }
         }
 
-        public IInput PromptInput(string message, IInput input)
+        public IDictionary<string, int> PromptInput(string message, IDictionary<string, int?> input)
         {
-            Console.WriteLine(message);
-            Console.WriteLine();
-            foreach (string key in input.Keys)
+            Dictionary<string, int> inputFilled = new();
+            try
             {
-                Console.Write($"What is {key}: ");
-                string? value = Console.ReadLine()?.Trim();
-                input[key] = value;
+                Console.WriteLine(message);
+                Console.WriteLine();
+                foreach (string key in input.Keys)
+                {
+                    inputFilled[key] = PromptInput(key);
+                }
+                return inputFilled;
             }
-            return input;
+            catch (Exception exception)
+            {
+                DisplayError(exception.Message);
+                throw;
+            }
         }
 
-        public void DisplayOutput(string message, IOutput output)
+        public void DisplayOutput(string message, IDictionary<string, int> output)
         {
-            Console.WriteLine(message);
-            Console.WriteLine();
-            foreach (string key in output.Keys)
+            try
             {
-                Console.WriteLine($"{key}: {output[key]}");
+                Console.WriteLine(message);
+                Console.WriteLine();
+                foreach (string key in output.Keys)
+                {
+                    Console.WriteLine($"{key}: {output[key]}");
+                }
             }
+            catch (Exception exception)
+            {
+                DisplayError(exception.Message);
+                throw;
+            }
+        }
+
+        private static void DisplayError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("An error occurred while displaying the problem.");
+            Console.WriteLine(message);
+            Console.ReadKey();
+            Console.ResetColor();
+        }
+
+        private static int PromptInput(string key)
+        {
+            Console.Write($"Choose a value for [{key}]: ");
+            string? value = Console.ReadLine()?.Trim();
+            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(key, "Input cannot be null.");
+            if (!int.TryParse(value, out int result)) throw new ArgumentException("Input must be an integer.", key);
+            return result;
         }
     }
 }

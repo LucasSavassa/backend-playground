@@ -2,7 +2,8 @@
 {
     public interface IInterface
     {
-        IInput PromptInput(string prompt, IInput input);
-        void DisplayOutput(string message, IOutput output);
+        void DisplayProblem(string message);
+        IDictionary<string, int> PromptInput(string prompt, IDictionary<string, int?> input);
+        void DisplayOutput(string message, IDictionary<string, int> output);
     }
 }
