@@ -9,10 +9,22 @@ namespace Euler.Application
         {
             IProblem problem = new Problem1();
             IInterface userInterface = new ConsoleInterface();
-            userInterface.DisplayProblem(problem.ProblemMessage);
-            IDictionary<string, int> input = userInterface.PromptInput(problem.InputMessage, problem.Input);
-            IDictionary<string, int> output = problem.Solve(input);
-            userInterface.DisplayOutput(problem.OutputMessage, output);
+
+            do
+            {
+                userInterface.DisplayProblem(problem.ProblemMessage);
+                IDictionary<string, string?> input = userInterface.PromptInput(problem.InputMessage, problem.Input);
+                Stamp stamp = problem.ValidateInput(input);
+
+                if (!stamp.Approved)
+                {
+                    userInterface.DisplayError(stamp.Message);
+                    continue;
+                }
+
+                IDictionary<string, int> output = problem.Solve(input);
+                userInterface.DisplayOutput(problem.OutputMessage, output);
+            } while (userInterface.PromptContinue());
         }
     }
 }

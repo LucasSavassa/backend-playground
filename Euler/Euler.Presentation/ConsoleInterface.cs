@@ -6,12 +6,12 @@ namespace Euler.Presentation
     {
         public ConsoleInterface() { }
 
-        public void DisplayProblem(string message)
+        public void DisplayProblem(string? message)
         {
+            Console.Clear();
             try
             {
-                Console.WriteLine(message);
-                Console.WriteLine();
+                DisplayMessage(message);
             }
             catch (Exception exception)
             {
@@ -20,17 +20,21 @@ namespace Euler.Presentation
             }
         }
 
-        public IDictionary<string, int> PromptInput(string message, IDictionary<string, int?> input)
+        public IDictionary<string, string?> PromptInput(string? message, IDictionary<string, string?> input)
         {
-            Dictionary<string, int> inputFilled = new();
+            Dictionary<string, string?> inputFilled = new();
+
             try
             {
-                Console.WriteLine(message);
-                Console.WriteLine();
+                DisplayMessage(message);
+
                 foreach (string key in input.Keys)
                 {
                     inputFilled[key] = PromptInput(key);
                 }
+
+                Console.WriteLine();
+
                 return inputFilled;
             }
             catch (Exception exception)
@@ -40,16 +44,19 @@ namespace Euler.Presentation
             }
         }
 
-        public void DisplayOutput(string message, IDictionary<string, int> output)
+        public void DisplayOutput(string? message, IDictionary<string, int> output)
         {
             try
             {
-                Console.WriteLine(message);
-                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                DisplayMessage(message);
+
                 foreach (string key in output.Keys)
                 {
                     Console.WriteLine($"{key}: {output[key]}");
                 }
+                Console.ResetColor();
+                Console.WriteLine();
             }
             catch (Exception exception)
             {
@@ -58,22 +65,39 @@ namespace Euler.Presentation
             }
         }
 
-        private static void DisplayError(string message)
+        public void DisplayError(string? message)
         {
+            if (string.IsNullOrWhiteSpace(message)) return;
+
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("An error occurred while displaying the problem.");
             Console.WriteLine(message);
+            Console.Write("Type any key to continue...");
             Console.ReadKey();
             Console.ResetColor();
         }
 
-        private static int PromptInput(string key)
+        public bool PromptContinue()
+        {
+            Console.Write("Would you like to continue? [Y/N]: ");
+            string? input = Console.ReadLine()?.Trim().ToLower();
+            return string.IsNullOrWhiteSpace(input) || input == "y" || input == "yes";
+        }
+
+        private static void DisplayMessage(string? message)
+        {
+            if (message is not null)
+            {
+                Console.WriteLine(message);
+                Console.WriteLine();
+            }
+        }
+
+        private static string? PromptInput(string key)
         {
             Console.Write($"Choose a value for [{key}]: ");
             string? value = Console.ReadLine()?.Trim();
-            if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(key, "Input cannot be null.");
-            if (!int.TryParse(value, out int result)) throw new ArgumentException("Input must be an integer.", key);
-            return result;
+            return value;
         }
     }
 }
