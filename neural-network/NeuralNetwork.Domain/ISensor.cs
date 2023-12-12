@@ -2,6 +2,6 @@
 {
     public interface ISensor : INeuron
     {
-        void Set(double value);
+        void Fire(double value);
     }
 }

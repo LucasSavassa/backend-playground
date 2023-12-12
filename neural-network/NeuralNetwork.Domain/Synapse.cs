@@ -1,12 +1,12 @@
 ﻿namespace NeuralNetwork.Domain
 {
-    internal class NeuralConnection : INeuralConnection
+    internal class Synapse : ISynapse
     {
-        public double Weight { get; init; }
+        public double Weight { get; set; }
         public INeuron Input { get; init; }
         public INeuron Output { get; init; }
 
-        public NeuralConnection(INeuron input, INeuron output, double weight)
+        public Synapse(INeuron input, INeuron output, double weight)
         {
             Input = input;
             Output = output;

@@ -17,10 +17,8 @@ namespace NeuralNetwork.Application
             neuron2.Connect(inputNeuron1, weight: -1.0);
             neuron2.Connect(inputNeuron2, weight: -1.0);
 
-            inputNeuron1.Set(2.0);
-            inputNeuron2.Set(1.0);
-            
-            inputNeuron1.Fire();
+            inputNeuron1.Fire(2.0);
+            inputNeuron2.Fire(1.0);
             
             Console.WriteLine($"Neuron 1 value: {neuron1.Value}");
             Console.WriteLine($"Neuron 2 value: {neuron2.Value}");

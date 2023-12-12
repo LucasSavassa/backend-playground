@@ -2,11 +2,10 @@
 {
     public interface INeuron
     {
-        event EventHandler? RaiseNeuronFiredEvent;
-        ICollection<INeuralConnection> Connections { get; }
+        event EventHandler? NeuronFired;
+        IReadOnlyCollection<ISynapse> Synapses { get; }
         double Value { get; }
         double Bias { get; }
-        void Connect(INeuron input, double weight);
-        void Fire();
+        ISynapse Connect(INeuron input, double weight);
     }
 }

@@ -2,29 +2,26 @@
 {
     public class InputNeuron : ISensor
     {
-        public event EventHandler? RaiseNeuronFiredEvent;
-        public ICollection<INeuralConnection> Connections { get; } = new List<INeuralConnection>();
+        public event EventHandler? NeuronFired;
+        public IReadOnlyCollection<ISynapse> Synapses { get; } = new List<ISynapse>();
         public double Value { get; private set; }
         public double Bias => 0;
 
-        public void Connect(INeuron input, double weight)
+        public ISynapse Connect(INeuron input, double weight)
         {
-            return;
+            throw new InvalidOperationException("Input neurons cannot be connected to other neurons.");
         }
 
-        public void Fire()
-        {
-            OnRaiseNeuronFiredEvent();
-        }
-
-        private void OnRaiseNeuronFiredEvent()
-        {
-            RaiseNeuronFiredEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Set(double value)
+        public void Fire(double value)
         {
             Value = value;
+
+            OnNeuronFired();
+        }
+
+        private void OnNeuronFired()
+        {
+            NeuronFired?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,51 +1,59 @@
-﻿namespace NeuralNetwork.Domain
+﻿using System.Collections.ObjectModel;
+
+namespace NeuralNetwork.Domain
 {
     public class SigmoidNeuron : INeuron
     {
-        public event EventHandler? RaiseNeuronFiredEvent;
-        public ICollection<INeuralConnection> Connections { get; private set; } = new List<INeuralConnection>();
+        private readonly List<ISynapse> _synapses = new();
+
+        public event EventHandler? NeuronFired;
+        public IReadOnlyCollection<ISynapse> Synapses { get; init; }
         public double Value { get; private set; }
         public double Bias { get; private set; }
 
         public SigmoidNeuron(double bias)
         {
             Bias = bias;
+            Synapses = new ReadOnlyCollection<ISynapse>(_synapses);
         }
 
-        public void Connect(INeuron input, double weight)
+        public ISynapse Connect(INeuron input, double weight)
         {
-            NeuralConnection neuralConnection = new(input, this, weight);
-            Connections.Add(neuralConnection);
-            input.RaiseNeuronFiredEvent += HandleNeuronFiredEvent;
+            input.NeuronFired += HandleNeuronFired;
+
+            Synapse synapse = new(input, this, weight);
+            _synapses.Add(synapse);
+            
+            return synapse;
         }
 
-        public void Fire()
+        private void HandleNeuronFired(object? sender, EventArgs e)
+        {
+            Fire();
+        }
+
+        private void Fire()
         {
             double sum = 0;
 
-            foreach (INeuralConnection connection in Connections)
+            foreach (ISynapse connection in Synapses)
             {
                 sum += connection.Input.Value * connection.Weight;
             }
 
             Value = Sigmoid(sum + Bias);
 
-            OnRaiseNeuronFiredEvent();
+            OnNeuronFired();
         }
 
-        private double Sigmoid(double x)
+        private static double Sigmoid(double x)
         {
             return 1 / (1 + Math.Exp(-x));
         }
 
-        private void OnRaiseNeuronFiredEvent()
+        private void OnNeuronFired()
         {
-            RaiseNeuronFiredEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void HandleNeuronFiredEvent(object? sender, EventArgs e)
-        {
-            Fire();
+            NeuronFired?.Invoke(this, EventArgs.Empty);
         }
     }
 }
