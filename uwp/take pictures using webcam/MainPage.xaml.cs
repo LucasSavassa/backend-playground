@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
@@ -35,9 +36,12 @@ namespace PhotographService
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private CancellationTokenSource cancellationTokenSource;
+        private CancellationToken cancellationToken;
         private MediaCapture _media;
         private bool _isPreviewing;
         private DisplayRequest _displayRequest = new DisplayRequest();
+        private const int _interval = 10;
 
         public MainPage()
         {
@@ -49,9 +53,38 @@ namespace PhotographService
             await StartPreviewAsync();
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void Start_Click(object sender, RoutedEventArgs e)
         {
-            await CapturePhotoAsync();
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
+            await StartCapturing(cancellationToken);
+        }
+
+        private void End_Click(object sender, RoutedEventArgs e)
+        {
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+            }
+        }
+
+        private async Task StartCapturing(CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+
+                while (true)
+                {
+                    await CapturePhotoAsync();
+                    await Task.Delay(TimeSpan.FromSeconds(_interval), token);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
         }
 
         private async Task StartPreviewAsync()
@@ -126,7 +159,6 @@ namespace PhotographService
             StorageLibrary root = await StorageLibrary.GetLibraryAsync(KnownLibraryId.Pictures);
             StorageFolder folder = await root.SaveFolder.CreateFolderAsync("Portraits", CreationCollisionOption.OpenIfExists);
             StorageFile photoFile = await folder.CreateFileAsync("photo.jpg", CreationCollisionOption.GenerateUniqueName);
-            StorageFile metadataFile = await folder.CreateFileAsync("metadata.txt", CreationCollisionOption.GenerateUniqueName);
 
             using (var captureStream = new InMemoryRandomAccessStream())
             {
@@ -135,24 +167,15 @@ namespace PhotographService
                 {
                     var decoder = await BitmapDecoder.CreateAsync(captureStream);
                     var encoder = await BitmapEncoder.CreateForTranscodingAsync(photoStream, decoder);
-                    var properties = new BitmapPropertySet { { "System.Photo.Orientation", new BitmapTypedValue(PhotoOrientation.Normal, PropertyType.UInt16) } };
-                    await encoder.BitmapProperties.SetPropertiesAsync(properties);
+                    var imageProperties = new BitmapPropertySet { { "System.Photo.Orientation", new BitmapTypedValue(PhotoOrientation.Normal, PropertyType.UInt16) } };
+                    await encoder.BitmapProperties.SetPropertiesAsync(imageProperties);
                     await encoder.FlushAsync();
-
-                    var requestedProperties = new List<string> { "System.DateTaken" };
-                    var imageProperties = await decoder.BitmapProperties.GetPropertiesAsync(requestedProperties);
-                    DateTimeOffset dateTaken;
-                    if (imageProperties.ContainsKey("System.DateTaken"))
-                    {
-                        dateTaken = (DateTimeOffset)imageProperties["System.DateTaken"].Value;
-                    }
-                    if (dateTaken == null)
-                    {
-                        return;
-                    }
-                    await FileIO.WriteTextAsync(metadataFile, dateTaken.ToString());
                 }
             }
+
+            ImageProperties fileProperties = await photoFile.Properties.GetImagePropertiesAsync();
+            DateTimeOffset dateTaken = fileProperties.DateTaken;
+            await photoFile.RenameAsync($"{dateTaken:HH-mm-ss}.jpg", NameCollisionOption.GenerateUniqueName);
         }
     }
 }

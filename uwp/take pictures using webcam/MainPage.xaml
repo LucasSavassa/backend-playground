@@ -9,7 +9,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="800" Height="600" Loaded="Page_Loaded">
 
     <Grid>
-        <Button x:Name="Capture" Content="Capture" Height="50" Margin="595,540,0,0" VerticalAlignment="Top" Width="195" Click="Button_Click"/>
+        <Button x:Name="Start" Content="Start" Height="50" Margin="595,486,0,0" VerticalAlignment="Top" Width="195" Click="Start_Click"/>
+        <Button x:Name="End" Content="End" Height="50" Margin="595,541,0,0" VerticalAlignment="Top" Width="195" Click="End_Click"/>
         <CaptureElement x:Name="PreviewControl" Margin="10,10,210,10"/>
         <Image x:Name="CapturedImage" Height="197" Width="197" Margin="593,10,10,393"/>
 
