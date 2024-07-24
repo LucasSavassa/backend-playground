@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
@@ -11,6 +12,9 @@ using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
+using Windows.Storage;
+using Windows.Storage.FileProperties;
+using Windows.Storage.Streams;
 using Windows.System.Display;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -95,6 +99,12 @@ namespace PhotographService
 
         private async Task CapturePhotoAsync()
         {
+            await CapturePhotoToUI();
+            await CapturePhotoToFile();
+        }
+
+        private async Task CapturePhotoToUI()
+        {
             var lowLagCapture = await _media.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreateUncompressed(MediaPixelFormat.Bgra8));
             var capturedPhoto = await lowLagCapture.CaptureAsync();
             var softwareBitmap = capturedPhoto.Frame.SoftwareBitmap;
@@ -109,6 +119,40 @@ namespace PhotographService
             CapturedImage.Source = source;
 
             await lowLagCapture.FinishAsync();
+        }
+
+        private async Task CapturePhotoToFile()
+        {
+            StorageLibrary root = await StorageLibrary.GetLibraryAsync(KnownLibraryId.Pictures);
+            StorageFolder folder = await root.SaveFolder.CreateFolderAsync("Portraits", CreationCollisionOption.OpenIfExists);
+            StorageFile photoFile = await folder.CreateFileAsync("photo.jpg", CreationCollisionOption.GenerateUniqueName);
+            StorageFile metadataFile = await folder.CreateFileAsync("metadata.txt", CreationCollisionOption.GenerateUniqueName);
+
+            using (var captureStream = new InMemoryRandomAccessStream())
+            {
+                await _media.CapturePhotoToStreamAsync(ImageEncodingProperties.CreateJpeg(), captureStream);
+                using (var photoStream = await photoFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    var decoder = await BitmapDecoder.CreateAsync(captureStream);
+                    var encoder = await BitmapEncoder.CreateForTranscodingAsync(photoStream, decoder);
+                    var properties = new BitmapPropertySet { { "System.Photo.Orientation", new BitmapTypedValue(PhotoOrientation.Normal, PropertyType.UInt16) } };
+                    await encoder.BitmapProperties.SetPropertiesAsync(properties);
+                    await encoder.FlushAsync();
+
+                    var requestedProperties = new List<string> { "System.DateTaken" };
+                    var imageProperties = await decoder.BitmapProperties.GetPropertiesAsync(requestedProperties);
+                    DateTimeOffset dateTaken;
+                    if (imageProperties.ContainsKey("System.DateTaken"))
+                    {
+                        dateTaken = (DateTimeOffset)imageProperties["System.DateTaken"].Value;
+                    }
+                    if (dateTaken == null)
+                    {
+                        return;
+                    }
+                    await FileIO.WriteTextAsync(metadataFile, dateTaken.ToString());
+                }
+            }
         }
     }
 }
