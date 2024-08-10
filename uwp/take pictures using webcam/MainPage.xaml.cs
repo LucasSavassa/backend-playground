@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -41,7 +42,8 @@ namespace PhotographService
         private MediaCapture _media;
         private bool _isPreviewing;
         private DisplayRequest _displayRequest = new DisplayRequest();
-        private const int _interval = 10;
+        private int _interval = 10;
+        private readonly ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
 
         public MainPage()
         {
@@ -51,6 +53,19 @@ namespace PhotographService
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await StartPreviewAsync();
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            if (_localSettings.Values.ContainsKey("Interval"))
+            {
+                _interval = (int)_localSettings.Values["Interval"];
+            }
+            else
+            {
+                _localSettings.Values["Interval"] = _interval;
+            }
         }
 
         private async void Start_Click(object sender, RoutedEventArgs e)
