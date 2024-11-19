@@ -1,0 +1,30 @@
+{
+  "environment": "production",
+  "template": "Whirlpool (Hot Wort Receiver)",
+  "rule": "Batch_Step_Start_Empty",
+  "asset_global_codification_id": "1.12.19.143.1.2-1.934-1.0",
+  "event_type_code": "6",
+  "event_type_name": "Batch Step Start",
+  "pts_code": "",
+  "pi_code": "",
+  "collect_time": 1727670519238,
+  "event": "TEMPLATE_DATA",
+  "values": {
+    "1.12.19.143.1.2-1.934-1.0.7238": 3702,
+    "1.12.19.143.1.2-1.934-1.0.7244": 5,
+    "1.12.19.143.1.2-1.934-1.0.7240": 1
+  },
+  "values_details": {},
+  "quality_rate": 1,
+  "consumers": [],
+  "uom": {
+    "1.12.19.143.1.2-1.934-1.0.7238": null,
+    "1.12.19.143.1.2-1.934-1.0.7244": null,
+    "1.12.19.143.1.2-1.934-1.0.7240": null
+  },
+  "msg_id": "59b4e44731c3d873d978e18a4836a0be4c6904054086dc4f423d7b33367f06d9",
+  "iothub-connection-device-id": "soda-tor-collector",
+  "EventProcessedUtcTime": "2024-09-30T04:28:42.4992238Z",
+  "PartitionId": 0,
+  "EventEnqueuedUtcTime": "2024-09-30T04:28:41.573Z"
+}

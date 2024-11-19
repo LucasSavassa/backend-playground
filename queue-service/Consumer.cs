@@ -1,10 +1,10 @@
 namespace QueueService;
 
-public class Worker : BackgroundService
+public class Consumer : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<Consumer> _logger;
 
-    public Worker(ILogger<Worker> logger)
+    public Consumer(ILogger<Consumer> logger)
     {
         _logger = logger;
     }

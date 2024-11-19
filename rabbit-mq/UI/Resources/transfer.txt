@@ -1,0 +1,34 @@
+{
+  "environment": "production",
+  "template": "Brew Kettle (Wort Kettle)",
+  "rule": "Transfer to WP101",
+  "asset_global_codification_id": "1.12.19.143.1.2-1.859-1.0",
+  "event_type_code": "25",
+  "event_type_name": "Transfer Out End",
+  "pts_code": "",
+  "pi_code": "",
+  "collect_time": 1727669438121,
+  "event": "TEMPLATE_DATA",
+  "values": {
+    "1.12.19.143.1.2-1.859-1.0.7093": 345,
+    "1.12.19.143.1.2-1.859-1.0.7300": "2",
+    "1.12.19.143.1.2-1.859-1.0.7238": 3702,
+    "1.12.19.143.1.2-1.859-1.0.7240": 1,
+    "1.12.19.143.1.2-1.859-1.0.7288": "1.12.19.143.1.2-1.934-1.0"
+  },
+  "values_details": {},
+  "quality_rate": 1,
+  "consumers": [],
+  "uom": {
+    "1.12.19.143.1.2-1.859-1.0.7093": null,
+    "1.12.19.143.1.2-1.859-1.0.7300": null,
+    "1.12.19.143.1.2-1.859-1.0.7238": null,
+    "1.12.19.143.1.2-1.859-1.0.7240": null,
+    "1.12.19.143.1.2-1.859-1.0.7251": null
+  },
+  "msg_id": "e00cd488e8ddfd46be5272ddc0846e58ffa1f292d219ccbe9aa0e57ce3b76c90",
+  "iothub-connection-device-id": "soda-tor-collector",
+  "EventProcessedUtcTime": "2024-09-30T04:10:44.124052Z",
+  "PartitionId": 0,
+  "EventEnqueuedUtcTime": "2024-09-30T04:10:43.956Z"
+}

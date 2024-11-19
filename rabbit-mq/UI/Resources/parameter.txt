@@ -1,0 +1,28 @@
+{
+  "environment": "production",
+  "template": "Whirlpool (Hot Wort Receiver)",
+  "rule": "Cooling Duration",
+  "asset_global_codification_id": "1.12.19.143.1.2-1.934-1.0",
+  "event_type_code": "0",
+  "event_type_name": "",
+  "pts_code": "P.BR.BH.WCO.0013",
+  "pi_code": "",
+  "collect_time": 1727674131237,
+  "event": "TEMPLATE_DATA",
+  "values": {
+    "1.12.19.143.1.2-1.934-1.0.7238": 3702,
+    "1.12.19.143.1.2-1.934-1.0.7093": 58.54999923706055
+  },
+  "values_details": {},
+  "quality_rate": 1,
+  "consumers": [],
+  "uom": {
+    "1.12.19.143.1.2-1.934-1.0.7238": null,
+    "1.12.19.143.1.2-1.934-1.0.7093": null
+  },
+  "msg_id": "b44b80bf5f1c2c95499d0d31ee0ebe02d72a743f798124ebe2508f894acac14b",
+  "iothub-connection-device-id": "soda-tor-collector",
+  "EventProcessedUtcTime": "2024-09-30T05:28:54.9002038Z",
+  "PartitionId": 0,
+  "EventEnqueuedUtcTime": "2024-09-30T05:28:54.26Z"
+}
