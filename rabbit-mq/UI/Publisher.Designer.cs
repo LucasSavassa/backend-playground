@@ -46,19 +46,22 @@
             // 
             pictureBox.Image = Properties.Resources.worker;
             pictureBox.InitialImage = null;
-            pictureBox.Location = new Point(10, 10);
+            pictureBox.Location = new Point(9, 8);
+            pictureBox.Margin = new Padding(3, 2, 3, 2);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(130, 130);
-            pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox.Size = new Size(98, 98);
+            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             // 
             // comboBox
             // 
             comboBox.FormattingEnabled = true;
-            comboBox.Location = new Point(155, 10);
+            comboBox.Items.AddRange(new object[] { "none" });
+            comboBox.Location = new Point(136, 8);
+            comboBox.Margin = new Padding(3, 2, 3, 2);
             comboBox.Name = "comboBox";
-            comboBox.Size = new Size(192, 28);
+            comboBox.Size = new Size(168, 23);
             comboBox.TabIndex = 1;
             // 
             // richTextBox
@@ -66,9 +69,10 @@
             richTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             richTextBox.BackColor = SystemColors.InfoText;
             richTextBox.ForeColor = SystemColors.ControlLightLight;
-            richTextBox.Location = new Point(362, 10);
+            richTextBox.Location = new Point(317, 8);
+            richTextBox.Margin = new Padding(3, 2, 3, 2);
             richTextBox.Name = "richTextBox";
-            richTextBox.Size = new Size(348, 130);
+            richTextBox.Size = new Size(305, 98);
             richTextBox.TabIndex = 2;
             richTextBox.Text = "";
             richTextBox.TextChanged += richTextBox_TextChanged;
@@ -76,9 +80,10 @@
             // buttonStart
             // 
             buttonStart.Font = new Font("Segoe UI", 8F);
-            buttonStart.Location = new Point(155, 44);
+            buttonStart.Location = new Point(136, 33);
+            buttonStart.Margin = new Padding(3, 2, 3, 2);
             buttonStart.Name = "buttonStart";
-            buttonStart.Size = new Size(60, 30);
+            buttonStart.Size = new Size(52, 22);
             buttonStart.TabIndex = 3;
             buttonStart.Text = "Start";
             buttonStart.UseVisualStyleBackColor = true;
@@ -87,9 +92,10 @@
             // buttonEnd
             // 
             buttonEnd.Font = new Font("Segoe UI", 8F);
-            buttonEnd.Location = new Point(221, 44);
+            buttonEnd.Location = new Point(193, 33);
+            buttonEnd.Margin = new Padding(3, 2, 3, 2);
             buttonEnd.Name = "buttonEnd";
-            buttonEnd.Size = new Size(60, 30);
+            buttonEnd.Size = new Size(52, 22);
             buttonEnd.TabIndex = 4;
             buttonEnd.Text = "End";
             buttonEnd.UseVisualStyleBackColor = true;
@@ -98,11 +104,12 @@
             // trackBar
             // 
             trackBar.LargeChange = 300;
-            trackBar.Location = new Point(155, 84);
+            trackBar.Location = new Point(136, 63);
+            trackBar.Margin = new Padding(3, 2, 3, 2);
             trackBar.Maximum = 1000;
             trackBar.Minimum = 1;
             trackBar.Name = "trackBar";
-            trackBar.Size = new Size(192, 56);
+            trackBar.Size = new Size(168, 45);
             trackBar.SmallChange = 100;
             trackBar.TabIndex = 5;
             trackBar.TickFrequency = 100;
@@ -119,9 +126,10 @@
             // buttonErase
             // 
             buttonErase.Font = new Font("Segoe UI", 8F);
-            buttonErase.Location = new Point(287, 44);
+            buttonErase.Location = new Point(251, 33);
+            buttonErase.Margin = new Padding(3, 2, 3, 2);
             buttonErase.Name = "buttonErase";
-            buttonErase.Size = new Size(60, 30);
+            buttonErase.Size = new Size(52, 22);
             buttonErase.TabIndex = 6;
             buttonErase.Text = "Delete";
             buttonErase.UseVisualStyleBackColor = true;
@@ -134,7 +142,7 @@
             // 
             // Publisher
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BorderStyle = BorderStyle.FixedSingle;
@@ -145,8 +153,9 @@
             Controls.Add(richTextBox);
             Controls.Add(comboBox);
             Controls.Add(pictureBox);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Publisher";
-            Size = new Size(722, 150);
+            Size = new Size(632, 112);
             Load += Publisher_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBar).EndInit();

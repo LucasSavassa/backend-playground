@@ -1,4 +1,5 @@
 using Domain;
+using System;
 
 namespace UI
 {
@@ -9,6 +10,13 @@ namespace UI
         public Main()
         {
             InitializeComponent();
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            List<string> options = TemplateHelper.Get();
+            comboBoxTemplateType.Items.AddRange([.. options]);
+            comboBoxTemplateType.SelectedIndex = 0;
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
@@ -56,6 +64,52 @@ namespace UI
                 int y = this.tabPageMain.Padding.Vertical + ((publisher.Height + this.tabPageMain.Padding.Vertical) * i);
                 publisher.Location = new Point(x, y);
             }
+        }
+
+        private void comboBoxTemplateType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = comboBoxTemplateType.SelectedIndex;
+            string template = comboBoxTemplateType.Text;
+            ToggleTemplateState(index, template);
+        }
+
+        private void ToggleTemplateState(int index, string templateName)
+        {
+            if (string.IsNullOrWhiteSpace(templateName) || templateName == "none")
+            {
+                comboBoxTemplateType.SelectedIndex = 0;
+                textBoxTemplateName.Text = string.Empty;
+                richTextBoxTemplateContent.Text = string.Empty;
+            }
+            else
+            {
+                comboBoxTemplateType.SelectedIndex = index;
+                textBoxTemplateName.Text = templateName;
+                richTextBoxTemplateContent.Text = TemplateHelper.Get(templateName);
+            }
+        }
+
+        private void buttonTemplateSave_Click(object sender, EventArgs e)
+        {
+            string templateName = textBoxTemplateName.Text;
+            string content = richTextBoxTemplateContent.Text;
+
+            TemplateHelper.Update(templateName, content);
+            if (!comboBoxTemplateType.Items.Contains(templateName))
+            {
+                comboBoxTemplateType.Items.Add(templateName);
+            }
+
+            int index = comboBoxTemplateType.Items.IndexOf(templateName);
+            ToggleTemplateState(index, templateName);
+        }
+
+        private void buttonTemplateDelete_Click(object sender, EventArgs e)
+        {
+            string templateName = textBoxTemplateName.Text;
+
+            TemplateHelper.Delete(templateName);
+            ToggleTemplateState(0, string.Empty);
         }
     }
 }

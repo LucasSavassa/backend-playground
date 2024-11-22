@@ -1,9 +1,4 @@
 ﻿using Domain;
-using System.Collections;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
-using UI.Properties;
 
 namespace UI
 {
@@ -28,29 +23,8 @@ namespace UI
 
         private void SetOptions()
         {
-            ResourceSet? resources = Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-
-            if (resources == null)
-            {
-                return;
-            }
-
-            List<string> options = [];
-
-            foreach (DictionaryEntry entry in resources)
-            {
-                string key = (string)entry.Key;
-
-                if (key.StartsWith("template-"))
-                {
-                    string templateName = key.Substring("template-".Length);
-
-                    options.Add(templateName);
-                }
-            }
-
-            options.Sort();
-            comboBox.Items.AddRange(options.ToArray());
+            List<string> options = TemplateHelper.Get();
+            comboBox.Items.AddRange([.. options]);
             comboBox.SelectedIndex = 0;
         }
 
@@ -60,9 +34,16 @@ namespace UI
             {
                 return;
             }
+
+            string message = GetMessage();
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                richTextBox.AppendText($"[{DateTime.Now.ToLocalTime()}] No template message found\n");
+                return;
+            }
+
             richTextBox.AppendText($"[{DateTime.Now.ToLocalTime()}] Starting...\n");
             timer.Start();
-            string message = GetMessage();
             backgroundWorker.RunWorkerAsync(message);
         }
 
@@ -83,9 +64,8 @@ namespace UI
 
         private string GetMessage()
         {
-            string templateName = (string)comboBox.SelectedItem!;
-            string key = $"template-{templateName}";
-            return Resources.ResourceManager.GetString(key)!;
+            string template = (string)comboBox.SelectedItem!;
+            return TemplateHelper.Get(template);
         }
 
         private void backgroundWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
