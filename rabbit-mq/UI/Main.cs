@@ -1,9 +1,8 @@
 using Domain;
-using System;
 
 namespace UI
 {
-    public partial class Main : System.Windows.Forms.Form
+    public partial class Main : Form
     {
         private readonly List<Publisher> publishers = [];
 
@@ -19,16 +18,34 @@ namespace UI
             comboBoxTemplateType.SelectedIndex = 0;
         }
 
-        private void buttonAdd_Click(object sender, EventArgs e)
+        private void buttonAddPerformance_Click(object sender, EventArgs e)
         {
-            Publisher publisher = CreatePublisher();
+            Publisher publisher = CreatePerformancePublisher();
             publishers.Add(publisher);
             tabPageMain.Controls.Add(publisher);
         }
 
-        private Publisher CreatePublisher()
+        private Publisher CreatePerformancePublisher()
         {
-            IPublisher publisher = new Domain.Publisher.Publisher("Worker", "simulation");
+            IPublisher publisher = new Domain.Publisher.Publisher("Generic publisher", "performance");
+            return CreatePublisher(publisher);
+        }
+
+        private void buttonAddGeneric_Click(object sender, EventArgs e)
+        {
+            Publisher publisher = CreateGenericPublisher();
+            publishers.Add(publisher);
+            tabPageMain.Controls.Add(publisher);
+        }
+
+        private Publisher CreateGenericPublisher()
+        {
+            IPublisher publisher = new Domain.Publisher.Publisher("Generic publisher", "generic");
+            return CreatePublisher(publisher);
+        }
+
+        private Publisher CreatePublisher(IPublisher publisher)
+        {
             Publisher component = new Publisher(publisher);
             component.Deleted += Publisher_Deleted;
             int x = this.tabPageMain.Padding.Horizontal;
@@ -38,6 +55,7 @@ namespace UI
             component.Width = width;
             component.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             return component;
+
         }
 
         private void Publisher_Deleted(object? sender, EventArgs e)

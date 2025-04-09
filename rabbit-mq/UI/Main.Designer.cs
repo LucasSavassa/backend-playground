@@ -30,7 +30,8 @@
         {
             tab = new TabControl();
             tabPageMain = new TabPage();
-            buttonAdd = new Button();
+            buttonAddPerformance = new Button();
+            buttonAddGeneric = new Button();
             tabPageTemplate = new TabPage();
             buttonTemplateSave = new Button();
             buttonTemplateDelete = new Button();
@@ -52,37 +53,46 @@
             tab.Controls.Add(tabPageMain);
             tab.Controls.Add(tabPageTemplate);
             tab.Controls.Add(tabPageSettings);
-            tab.Location = new Point(10, 9);
-            tab.Margin = new Padding(3, 2, 3, 2);
+            tab.Location = new Point(11, 12);
             tab.Name = "tab";
             tab.SelectedIndex = 0;
-            tab.Size = new Size(838, 397);
+            tab.Size = new Size(958, 961);
             tab.TabIndex = 0;
             // 
             // tabPageMain
             // 
             tabPageMain.AutoScroll = true;
-            tabPageMain.Controls.Add(buttonAdd);
-            tabPageMain.Location = new Point(4, 24);
-            tabPageMain.Margin = new Padding(3, 2, 3, 2);
+            tabPageMain.Controls.Add(buttonAddPerformance);
+            tabPageMain.Controls.Add(buttonAddGeneric);
+            tabPageMain.Location = new Point(4, 29);
             tabPageMain.Name = "tabPageMain";
-            tabPageMain.Padding = new Padding(3, 2, 3, 2);
-            tabPageMain.Size = new Size(830, 369);
+            tabPageMain.Padding = new Padding(3);
+            tabPageMain.Size = new Size(950, 928);
             tabPageMain.TabIndex = 0;
             tabPageMain.Text = "Main";
             tabPageMain.UseVisualStyleBackColor = true;
             // 
-            // buttonAdd
+            // buttonAddPerformance
             // 
-            buttonAdd.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonAdd.Location = new Point(744, 346);
-            buttonAdd.Margin = new Padding(3, 2, 3, 2);
-            buttonAdd.Name = "buttonAdd";
-            buttonAdd.Size = new Size(82, 22);
-            buttonAdd.TabIndex = 0;
-            buttonAdd.Text = "Add";
-            buttonAdd.UseVisualStyleBackColor = true;
-            buttonAdd.Click += buttonAdd_Click;
+            buttonAddPerformance.Dock = DockStyle.Bottom;
+            buttonAddPerformance.Location = new Point(3, 867);
+            buttonAddPerformance.Name = "buttonAddPerformance";
+            buttonAddPerformance.Size = new Size(944, 29);
+            buttonAddPerformance.TabIndex = 1;
+            buttonAddPerformance.Text = "Add performance publisher";
+            buttonAddPerformance.UseVisualStyleBackColor = true;
+            buttonAddPerformance.Click += buttonAddPerformance_Click;
+            // 
+            // buttonAddGeneric
+            // 
+            buttonAddGeneric.Dock = DockStyle.Bottom;
+            buttonAddGeneric.Location = new Point(3, 896);
+            buttonAddGeneric.Name = "buttonAddGeneric";
+            buttonAddGeneric.Size = new Size(944, 29);
+            buttonAddGeneric.TabIndex = 0;
+            buttonAddGeneric.Text = "Add generic publisher";
+            buttonAddGeneric.UseVisualStyleBackColor = true;
+            buttonAddGeneric.Click += buttonAddGeneric_Click;
             // 
             // tabPageTemplate
             // 
@@ -94,11 +104,10 @@
             tabPageTemplate.Controls.Add(labelTemplateName);
             tabPageTemplate.Controls.Add(labelTemplateType);
             tabPageTemplate.Controls.Add(comboBoxTemplateType);
-            tabPageTemplate.Location = new Point(4, 24);
-            tabPageTemplate.Margin = new Padding(3, 2, 3, 2);
+            tabPageTemplate.Location = new Point(4, 29);
             tabPageTemplate.Name = "tabPageTemplate";
-            tabPageTemplate.Padding = new Padding(3, 2, 3, 2);
-            tabPageTemplate.Size = new Size(830, 369);
+            tabPageTemplate.Padding = new Padding(3);
+            tabPageTemplate.Size = new Size(950, 928);
             tabPageTemplate.TabIndex = 1;
             tabPageTemplate.Text = "Template";
             tabPageTemplate.UseVisualStyleBackColor = true;
@@ -106,9 +115,10 @@
             // buttonTemplateSave
             // 
             buttonTemplateSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTemplateSave.Location = new Point(697, 302);
+            buttonTemplateSave.Location = new Point(797, 403);
+            buttonTemplateSave.Margin = new Padding(3, 4, 3, 4);
             buttonTemplateSave.Name = "buttonTemplateSave";
-            buttonTemplateSave.Size = new Size(122, 23);
+            buttonTemplateSave.Size = new Size(139, 31);
             buttonTemplateSave.TabIndex = 7;
             buttonTemplateSave.Text = "Save";
             buttonTemplateSave.UseVisualStyleBackColor = true;
@@ -117,9 +127,10 @@
             // buttonTemplateDelete
             // 
             buttonTemplateDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonTemplateDelete.Location = new Point(697, 331);
+            buttonTemplateDelete.Location = new Point(797, 441);
+            buttonTemplateDelete.Margin = new Padding(3, 4, 3, 4);
             buttonTemplateDelete.Name = "buttonTemplateDelete";
-            buttonTemplateDelete.Size = new Size(122, 23);
+            buttonTemplateDelete.Size = new Size(139, 31);
             buttonTemplateDelete.TabIndex = 6;
             buttonTemplateDelete.Text = "Delete";
             buttonTemplateDelete.UseVisualStyleBackColor = true;
@@ -129,18 +140,19 @@
             // 
             richTextBoxTemplateContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             richTextBoxTemplateContent.BackColor = SystemColors.ControlLight;
-            richTextBoxTemplateContent.Location = new Point(140, 69);
+            richTextBoxTemplateContent.Location = new Point(160, 92);
+            richTextBoxTemplateContent.Margin = new Padding(3, 4, 3, 4);
             richTextBoxTemplateContent.Name = "richTextBoxTemplateContent";
-            richTextBoxTemplateContent.Size = new Size(551, 285);
+            richTextBoxTemplateContent.Size = new Size(629, 379);
             richTextBoxTemplateContent.TabIndex = 5;
             richTextBoxTemplateContent.Text = "";
             // 
             // labelTemplateContent
             // 
             labelTemplateContent.AutoSize = true;
-            labelTemplateContent.Location = new Point(140, 51);
+            labelTemplateContent.Location = new Point(160, 68);
             labelTemplateContent.Name = "labelTemplateContent";
-            labelTemplateContent.Size = new Size(100, 15);
+            labelTemplateContent.Size = new Size(125, 20);
             labelTemplateContent.TabIndex = 4;
             labelTemplateContent.Text = "Template content";
             // 
@@ -148,26 +160,27 @@
             // 
             textBoxTemplateName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBoxTemplateName.BackColor = SystemColors.ControlLight;
-            textBoxTemplateName.Location = new Point(140, 25);
+            textBoxTemplateName.Location = new Point(160, 33);
+            textBoxTemplateName.Margin = new Padding(3, 4, 3, 4);
             textBoxTemplateName.Name = "textBoxTemplateName";
-            textBoxTemplateName.Size = new Size(551, 23);
+            textBoxTemplateName.Size = new Size(629, 27);
             textBoxTemplateName.TabIndex = 3;
             // 
             // labelTemplateName
             // 
             labelTemplateName.AutoSize = true;
-            labelTemplateName.Location = new Point(140, 7);
+            labelTemplateName.Location = new Point(160, 9);
             labelTemplateName.Name = "labelTemplateName";
-            labelTemplateName.Size = new Size(89, 15);
+            labelTemplateName.Size = new Size(112, 20);
             labelTemplateName.TabIndex = 2;
             labelTemplateName.Text = "Template name";
             // 
             // labelTemplateType
             // 
             labelTemplateType.AutoSize = true;
-            labelTemplateType.Location = new Point(10, 7);
+            labelTemplateType.Location = new Point(11, 9);
             labelTemplateType.Name = "labelTemplateType";
-            labelTemplateType.Size = new Size(82, 15);
+            labelTemplateType.Size = new Size(104, 20);
             labelTemplateType.TabIndex = 1;
             labelTemplateType.Text = "Template type";
             // 
@@ -175,30 +188,31 @@
             // 
             comboBoxTemplateType.FormattingEnabled = true;
             comboBoxTemplateType.Items.AddRange(new object[] { "none" });
-            comboBoxTemplateType.Location = new Point(7, 25);
+            comboBoxTemplateType.Location = new Point(8, 33);
+            comboBoxTemplateType.Margin = new Padding(3, 4, 3, 4);
             comboBoxTemplateType.Name = "comboBoxTemplateType";
-            comboBoxTemplateType.Size = new Size(121, 23);
+            comboBoxTemplateType.Size = new Size(138, 28);
             comboBoxTemplateType.TabIndex = 0;
             comboBoxTemplateType.SelectedIndexChanged += comboBoxTemplateType_SelectedIndexChanged;
             // 
             // tabPageSettings
             // 
-            tabPageSettings.Location = new Point(4, 24);
+            tabPageSettings.Location = new Point(4, 29);
+            tabPageSettings.Margin = new Padding(3, 4, 3, 4);
             tabPageSettings.Name = "tabPageSettings";
-            tabPageSettings.Padding = new Padding(3);
-            tabPageSettings.Size = new Size(830, 369);
+            tabPageSettings.Padding = new Padding(3, 4, 3, 4);
+            tabPageSettings.Size = new Size(950, 928);
             tabPageSettings.TabIndex = 2;
             tabPageSettings.Text = "Settings";
             tabPageSettings.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(861, 421);
+            ClientSize = new Size(984, 993);
             Controls.Add(tab);
-            Margin = new Padding(3, 2, 3, 2);
-            MinimumSize = new Size(877, 460);
+            MinimumSize = new Size(1000, 598);
             Name = "Main";
             ShowIcon = false;
             Text = "Simulator";
@@ -215,7 +229,7 @@
         private TabControl tab;
         private TabPage tabPageMain;
         private TabPage tabPageTemplate;
-        private Button buttonAdd;
+        private Button buttonAddGeneric;
         private TabPage tabPageSettings;
         private Label labelTemplateType;
         private ComboBox comboBoxTemplateType;
@@ -225,5 +239,6 @@
         private Label labelTemplateName;
         private Button buttonTemplateSave;
         private Button buttonTemplateDelete;
+        private Button buttonAddPerformance;
     }
 }
