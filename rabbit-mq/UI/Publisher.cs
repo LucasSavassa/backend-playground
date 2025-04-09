@@ -1,4 +1,7 @@
 ﻿using Domain;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace UI
 {
@@ -53,6 +56,7 @@ namespace UI
 
             while (!backgroundWorker.CancellationPending)
             {
+                message = UpdateCollectTime(message);
                 int interval = 1000 / _frequency;
                 Thread.Sleep(interval);
                 _publisher.Publish(message).Wait();
@@ -60,6 +64,29 @@ namespace UI
             }
 
             e.Cancel = true;
+        }
+
+        private string UpdateCollectTime(string message)
+        {
+            string updatedMessage = message;
+
+            JsonNode? node = JsonNode.Parse(message);
+
+            if (node == null)
+            {
+                return updatedMessage;
+            }
+
+            if (node is JsonObject jsonObject)
+            {
+                if (jsonObject.ContainsKey("collect_time"))
+                {
+                    jsonObject["collect_time"] = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    updatedMessage = jsonObject.ToJsonString();
+                }
+            }
+
+            return updatedMessage;
         }
 
         private string GetMessage()
