@@ -1,0 +1,87 @@
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+
+    // instructions
+    Not(in=instruction[15],out=isA);
+    Not(in=isA, out=isC);
+
+    // ALU
+
+        //inY
+        Mux16(a=outA, b=inM, sel=instruction[12], out=inY);
+        Mux(a=false, b=instruction[6], sel=isC, out=c6);
+        Mux(a=false, b=instruction[7], sel=isC, out=c7);
+        Mux(a=false, b=instruction[8], sel=isC, out=c8);
+        Mux(a=false, b=instruction[9], sel=isC, out=c9);
+        Mux(a=true, b=instruction[10], sel=isC, out=c10);
+        Mux(a=true, b=instruction[11], sel=isC, out=c11);
+
+        //ALU
+        ALU(x=outD, y=inY, zx=c11, nx=c10, zy=c9, ny=c8, f=c7, no=c6, out=outALU, out=outM, zr=zero, ng=negative);
+
+    // M
+        And(a=isC, b=instruction[3], out=writeM);
+
+    // D-register
+
+        //loadD
+        And(a=isC, b=instruction[4], out=loadD);
+
+        //register
+        DRegister(in=outALU, load=loadD, out=outD);
+
+    // A-register
+
+        //loadA
+        Or(a=isA, b=instruction[5], out=loadA);
+
+        //inA
+        Mux16(a=outALU, b=instruction, sel=isA, out=inA);
+
+        //register
+        ARegister(in=inA, load=loadA, out=outA, out[0..14]=addressM);
+
+    // PC-register
+
+        //inPC
+
+            //jump
+            DMux8Way(in=true, sel=instruction[0..2], a=null, b=sJGT, c=sJEQ, d=sJGE, e=sJLT, f=sJNE, g=sJLE, h=JMP);
+            Not(in=zero, out=nzero);
+            Not(in=negative, out=nnegative);
+            And(a=nnegative, b=nzero, out=positive);
+            Or(a=zero, b=negative, out=zeronegative);
+            Or(a=zero, b=positive, out=zeropositive);
+
+            And(a=sJGT, b=positive, out=JGT);
+            And(a=sJEQ, b=zero, out=JEQ);
+            And(a=sJGE, b=zeropositive, out=JGE);
+            And(a=sJLT, b=negative, out=JLT);
+            And(a=sJNE, b=nzero, out=JNE);
+            And(a=sJLE, b=zeronegative, out=JLE);
+
+            Or8Way(in[0]=false, in[1]=JGT, in[2]=JEQ, in[3]=JGE, in[4]=JLT, in[5]=JNE, in[6]=JLE, in[7]=JMP, out=jump0);
+            And(a=isC, b=jump0, out=jump);
+
+            //increment
+            Inc16(in=outPC, out=incPC);
+
+            //choose
+            Mux16(a=incPC, b=outA, sel=jump, out=nextpc);
+            Mux16(a=nextpc, b=false, sel=reset, out=inPC);
+
+            //register
+            PC(in=inPC, load=true, out[0..14]=pc, out=outPC);    
+}

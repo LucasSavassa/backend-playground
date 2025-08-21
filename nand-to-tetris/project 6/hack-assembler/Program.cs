@@ -53,7 +53,8 @@ class Program
 
     private static void HandleAssemble(string path)
     {
-        // Here you would add the logic to handle the assembly of the file.
-        Console.WriteLine($"Assembling file: {path}");
+        Assembler assembler = new(path);
+        string outputPath = assembler.Assemble();
+        Console.WriteLine($"binary file: {outputPath}");
     }
 }
