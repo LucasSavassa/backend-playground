@@ -1,13 +1,26 @@
+using System.Text;
+
 namespace Assembler;
 
 class Assembler(string path)
 {
     public string Assemble()
     {
-        // Here you would add the logic to handle the assembly of the file.
-        Console.WriteLine($"Assembling file: {path}");
+        if (!TryGetFile(path, out var file) || file is null)
+        {
+            Console.WriteLine($"assembler failed to get file: {path}");
+            return string.Empty;
+        }
 
-        return "path to compiled file";
+        StringBuilder stringBuilder = new();
+
+        foreach (var line in File.ReadLines(file.FullName))
+        {
+            string binary = Parse(line);
+            stringBuilder.AppendLine(binary);
+        }
+
+        return stringBuilder.ToString();
     }
 
     private static bool TryGetFile(string path, out FileInfo? file)
@@ -35,5 +48,22 @@ class Assembler(string path)
         }
 
         return true;
+    }
+
+    private string Parse(string line)
+    {
+        string trimmed = Trim(line);
+        IRule rule = GetRule(trimmed);
+        return rule.ToBinary();
+    }
+
+    private string Trim(string line)
+    {
+        throw new NotImplementedException();
+    }
+
+    private IRule GetRule(string line)
+    {
+        throw new NotImplementedException();
     }
 }
