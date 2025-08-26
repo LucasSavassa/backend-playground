@@ -54,7 +54,9 @@ class Program
     private static void HandleAssemble(string path)
     {
         Assembler assembler = new();
-        string? outputPath = assembler.Assemble(path);
+        string? assembly = assembler.Assemble(path);
+        string outputPath = Path.ChangeExtension(path, ".hack");
+        File.WriteAllText(outputPath, assembly ?? string.Empty);
         Console.WriteLine($"binary file: {outputPath}");
     }
 }

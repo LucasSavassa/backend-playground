@@ -23,9 +23,22 @@ class Assembler()
 
         foreach (var line in File.ReadLines(path))
         {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
             string binary = Parse(line);
-            stringBuilder.AppendLine(binary);
+
+            if (string.IsNullOrWhiteSpace(binary))
+            {
+                continue;
+            }
+
+            stringBuilder.Append($"{binary}\n");
         }
+
+        stringBuilder.Remove(stringBuilder.Length - 1, 1);
 
         return stringBuilder.ToString();
     }
