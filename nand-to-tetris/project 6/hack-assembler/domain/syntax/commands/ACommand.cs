@@ -36,6 +36,6 @@ class ACommand : IRule
 
         int address = int.Parse(line[1..]);
 
-        return Convert.ToString(address, 2);
+        return Convert.ToString(address, 2).PadLeft(16, '0');
     }
 }

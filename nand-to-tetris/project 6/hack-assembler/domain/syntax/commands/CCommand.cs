@@ -41,7 +41,11 @@ class CCommand : IRule
         line = ExtractJumpPart(line, out string jumpPart);
         string computationPart = line;
 
-        return $"{destination.Parse(destinationPart)}{computation.Parse(computationPart)}{jump.Parse(jumpPart)}";
+        string binary = computation.Parse(computationPart);
+        binary += destination.Parse(destinationPart);
+        binary += jump.Parse(jumpPart);
+
+        return binary.PadLeft(16, '1');
     }
 
     private static string RemoveComments(string line)
