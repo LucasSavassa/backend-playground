@@ -53,8 +53,8 @@ class Program
 
     private static void HandleAssemble(string path)
     {
-        Assembler assembler = new(path);
-        string outputPath = assembler.Assemble();
+        Assembler assembler = new();
+        string? outputPath = assembler.Assemble(path);
         Console.WriteLine($"binary file: {outputPath}");
     }
 }
