@@ -21,7 +21,7 @@ class Assembler()
 
         StringBuilder stringBuilder = new();
 
-        foreach (var line in File.ReadLines(path))
+        foreach (string line in File.ReadLines(path))
         {
             if (string.IsNullOrWhiteSpace(line))
             {
@@ -85,7 +85,7 @@ class Assembler()
             return string.Empty;
         }
 
-        return rule.Parse(line);
+        return rule.Parse(trimmed);
     }
 
     private IRule? GetRule(string line)
