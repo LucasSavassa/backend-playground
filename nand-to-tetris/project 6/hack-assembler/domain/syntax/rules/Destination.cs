@@ -9,9 +9,17 @@ class Destination : IRule
         rules = new Dictionary<string, string>
         {
             { "ADM" , "111" },
+            { "AMD" , "111" },
+            { "DMA" , "111" },
+            { "DAM" , "111" },
+            { "MAD" , "111" },
+            { "MDA" , "111" },
             { "AD"  , "110" },
+            { "DA"  , "110" },
             { "AM"  , "101" },
+            { "MA"  , "101" },
             { "DM"  , "011" },
+            { "MD"  , "011" },
             { "A"   , "100" },
             { "M"   , "001" },
             { "D"   , "010" },
