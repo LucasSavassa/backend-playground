@@ -1,13 +1,18 @@
+using System.Text.RegularExpressions;
+using Assembler.Extension;
+
 namespace Assembler.Syntax;
 
 class Symbol : IRule
 {
-    private readonly Dictionary<string, string> rules;
+    private const string pattern = @"^@(?'symbol'\w*[A-Za-z]\w*)$";
+    private readonly Dictionary<string, string> predefinedSymbols;
+    private readonly Dictionary<string, string> variables = [];
     private int nextAddress = 16; 
 
     public Symbol()
     {
-        rules = new Dictionary<string, string>()
+        predefinedSymbols = new Dictionary<string, string>()
         {
             { "R0"     , "0000000000000000" },
             { "R1"     , "0000000000000001" },
@@ -35,18 +40,51 @@ class Symbol : IRule
         };
     }
 
-    public void AddRule(string symbol, string value)
+    public void AddVariable(string name, string addressBinary)
     {
-        rules[symbol] = value;
+        variables[name] = addressBinary;
+    }
+
+    private string ToBinary(int nextAddress)
+    {
+        return Convert.ToString(nextAddress, 2).PadLeft(16, '0');
     }
 
     public bool IsMatch(string line)
     {
-        throw new NotImplementedException();
+        line = line.Trim();
+
+        Match match = Regex.Match(line, pattern);
+
+        return match.Success;
     }
 
     public string Parse(string line)
     {
-        throw new NotImplementedException();
+        line = line.Trim();
+
+        Match match = Regex.Match(line, pattern);
+
+        if (!match.Success)
+        {
+            throw new ArgumentException($"line is not a symbol: {line}");
+        }
+
+        string symbol = match.Groups["symbol"].Value;
+
+        if (predefinedSymbols.TryGetValue(symbol, out string? value))
+        {
+            return value;
+        }
+
+        if (variables.TryGetValue(symbol, out value))
+        {
+            return value;
+        }
+
+        string addressBinary = nextAddress.ToBinary();
+        variables[symbol] = addressBinary;
+        nextAddress++;
+        return addressBinary;
     }
 }

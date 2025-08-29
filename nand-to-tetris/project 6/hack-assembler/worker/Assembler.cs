@@ -1,16 +1,16 @@
 using System.Text;
+using Assembler.Extension;
 using Assembler.Syntax;
 
 namespace Assembler;
 
 class Assembler()
 {
-    private readonly List<IRule> rules =
-    [
-        new Comment(),
-        new ACommand(),
-        new CCommand(),
-    ];
+    private readonly Comment commentRule = new Comment();
+    private readonly Symbol symbolRule = new Symbol();
+    private readonly ACommand aCommand = new ACommand();
+    private readonly CCommand cCommand = new CCommand();
+    private readonly Label labelRule = new Label();
 
     public string? Assemble(string path)
     {
@@ -19,28 +19,10 @@ class Assembler()
             return null;
         }
 
-        StringBuilder stringBuilder = new();
+        List<string> commands = ExtractCommands(path);
+        List<string> commandsBinary = Parse(commands);
 
-        foreach (string line in File.ReadLines(path))
-        {
-            if (string.IsNullOrWhiteSpace(line))
-            {
-                continue;
-            }
-
-            string binary = Parse(line);
-
-            if (string.IsNullOrWhiteSpace(binary))
-            {
-                continue;
-            }
-
-            stringBuilder.Append($"{binary}\n");
-        }
-
-        stringBuilder.Remove(stringBuilder.Length - 1, 1);
-
-        return stringBuilder.ToString();
+        return string.Join("\n", commandsBinary);
     }
 
     private static bool IsValid(string path)
@@ -68,6 +50,63 @@ class Assembler()
         return true;
     }
 
+    private List<string> ExtractCommands(string path)
+    {
+        List<string> commands = [];
+        int commandCounter = 0;
+
+        foreach (string line in File.ReadLines(path))
+        {
+            if (!IsCommand(line))
+            {
+                continue;
+            }
+
+            if (labelRule.IsMatch(line))
+            {
+                string label = labelRule.GetLabel(line);
+                string value = commandCounter.ToBinary();
+                symbolRule.AddVariable(label, value);
+                continue;
+            }
+
+            commandCounter++;
+            commands.Add(line);
+        }
+
+        return commands;
+    }
+
+    private bool IsCommand(string line)
+    {
+        line = line.Trim();
+
+        if (string.IsNullOrWhiteSpace(line))
+        {
+            return false;
+        }
+
+        if (commentRule.IsMatch(line))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<string> Parse(List<string> commands)
+    {
+        List<string> commandsBinary = [];
+
+        foreach (string line in commands)
+        {
+            string binary = Parse(line);
+            commandsBinary.Add(binary);
+        }
+
+        return commandsBinary;
+    }
+
     private string Parse(string line)
     {
         if (string.IsNullOrWhiteSpace(line))
@@ -90,12 +129,19 @@ class Assembler()
 
     private IRule? GetRule(string line)
     {
-        foreach (IRule rule in rules)
+        if (symbolRule.IsMatch(line))
         {
-            if (rule.IsMatch(line))
-            {
-                return rule;
-            }
+            return symbolRule;
+        }
+
+        if (aCommand.IsMatch(line))
+        {
+            return aCommand;
+        }
+
+        if (cCommand.IsMatch(line))
+        {
+            return cCommand;
         }
 
         return null;
