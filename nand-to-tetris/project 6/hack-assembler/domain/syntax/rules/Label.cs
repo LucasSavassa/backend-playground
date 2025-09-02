@@ -4,7 +4,7 @@ namespace Assembler.Syntax;
 
 class Label : IRule
 {
-    const string pattern = @"^\((?'label'\w+)\)$";
+    const string pattern = @"^\((?'label'[A-Za-z].*)\)$";
 
     public bool IsMatch(string line)
     {

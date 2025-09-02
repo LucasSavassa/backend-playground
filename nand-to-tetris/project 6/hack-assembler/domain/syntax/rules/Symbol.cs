@@ -5,7 +5,7 @@ namespace Assembler.Syntax;
 
 class Symbol : IRule
 {
-    private const string pattern = @"^@(?'symbol'\w*[A-Za-z]\w*)$";
+    private const string pattern = @"^@(?'symbol'[A-Za-z].*)$";
     private readonly Dictionary<string, string> predefinedSymbols;
     private readonly Dictionary<string, string> variables = [];
     private int nextAddress = 16; 
@@ -43,11 +43,6 @@ class Symbol : IRule
     public void AddVariable(string name, string addressBinary)
     {
         variables[name] = addressBinary;
-    }
-
-    private string ToBinary(int nextAddress)
-    {
-        return Convert.ToString(nextAddress, 2).PadLeft(16, '0');
     }
 
     public bool IsMatch(string line)
