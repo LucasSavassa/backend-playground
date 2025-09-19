@@ -31,7 +31,7 @@
 
 (FOREACH)
     @KBD    //BREAK IF
-    D=A   //BREAK IF
+    D=A     //BREAK IF
     @16383  //BREAK IF
     D=D-M   //BREAK IF
     @LOOP   //BREAK IF

@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "program": "${workspaceFolder}/bin/debug/net9.0/hack-assembler.dll",
-            "args": ["assemble", "--help"]
+            "args": ["assemble", "C:\\Project\\GitHub\\backend-playground\\nand-to-tetris\\project 6\\test\\Pong.asm"]
         }
     ]
 }
