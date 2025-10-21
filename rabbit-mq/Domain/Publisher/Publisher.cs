@@ -26,8 +26,8 @@ namespace Domain.Publisher
             ConnectionFactory factory = new ConnectionFactory
             {
                 HostName = "localhost",
-                UserName = "publisher",
-                Password = "publisher"
+                UserName = "guest",
+                Password = "guest"
             };
 
             _connection = factory.CreateConnectionAsync().Result;
