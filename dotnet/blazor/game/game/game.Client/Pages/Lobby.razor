@@ -8,9 +8,17 @@
 
 <h3>Lobby</h3>
 
-<input tabindex="playerName" placeholder="your name" />
-<input tabindex="roomName" placeholder="room name" />
+<input @bind="playerName" placeholder="your name" />
+<input @bind="roomName" placeholder="room name" />
 <button @onclick="CreateRoom">Get Rooms</button>
+
+<h3>Rooms:</h3>
+<ul>
+    @foreach (GameRoom room in rooms)
+    {
+        <li>@room.Name <button @onclick="() => JoinRoom(room.ID)">join</button></li>
+    }
+</ul>
 
 @code {
     private HubConnection? hub;
@@ -24,7 +32,7 @@
         hub = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
                                         .Build();
 
-        hub.On<List<GameRoom>>("Rooms", (rooms) => { Console.WriteLine($"{rooms.Count} rooms."); });
+        hub.On<List<GameRoom>>("Rooms", (rooms) => { this.rooms = rooms; });
 
         await hub.StartAsync();
     }
@@ -34,6 +42,14 @@
         if (hub is not null)
         {
             room = await hub.InvokeAsync<GameRoom>("CreateRoom", roomName, playerName);
+        }
+    }
+
+    private async Task JoinRoom(Guid id)
+    {
+        if (hub is not null)
+        {
+            room = await hub.InvokeAsync<GameRoom>("JoinRoom", id, playerName);
         }
     }
 }
