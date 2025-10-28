@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using entities
+
+<h3>Room</h3>
+
+@if (CurrentRoom is not null)
+{
+    <h3>@CurrentRoom.Name</h3>
+
+    if (CurrentRoom.Players.Count < 2)
+    {
+        <h4>Waiting for another player...</h4>
+    }
+}
+else
+{
+    <p>No room selected.</p>
+}
+
+@code {
+    [CascadingParameter]
+    public HubConnection? Hub { get; set; }
+
+    [Parameter]
+    public GameRoom? CurrentRoom { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CurrentRoom is null)
+        {
+            return;
+        }
+
+        if (Hub is null)
+        {
+            return;
+        }
+
+        if (Hub.ConnectionId is null)
+        {
+            return;
+        }
+
+        Hub.On<Player>("PlayerJoined", (player) =>
+        {
+            CurrentRoom.Players.Add(player);
+            StateHasChanged();
+        });
+    }
+}
