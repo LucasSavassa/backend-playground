@@ -51,5 +51,19 @@ namespace game.Hubs
 
             return room;
         }
+
+        public async Task StartGame(Guid ID)
+        {
+            GameRoom? room = rooms.FirstOrDefault(r => r.ID == ID);
+
+            if (room is null)
+            {
+                return;
+            }
+
+            room.Game.Start();
+
+            await Clients.Group($"{room.ID}").SendAsync("GameUpdated", room);
+        }
     }
 }

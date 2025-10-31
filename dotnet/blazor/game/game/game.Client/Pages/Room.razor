@@ -11,6 +11,19 @@
     {
         <h4>Waiting for another player...</h4>
     }
+    else if (!CurrentRoom.Game.Started)
+    {
+        <h4>Waiting for host to start the game...</h4>
+
+        <button @onclick="Start">Start</button>
+    }
+    else
+    {
+        <h4>@CurrentRoom.Game.CurrentPlayerSymbol turn</h4>
+    }
+
+    <p>White: @CurrentRoom.Players.Find(player => player.ConnectionId == CurrentRoom.Game.PlayerWhiteId)?.Name</p>
+    <p>Black: @CurrentRoom.Players.Find(player => player.ConnectionId == CurrentRoom.Game.PlayerBlackId)?.Name</p>
 }
 else
 {
@@ -43,8 +56,28 @@ else
 
         Hub.On<Player>("PlayerJoined", (player) =>
         {
-            CurrentRoom.Players.Add(player);
             StateHasChanged();
         });
+
+        Hub.On<GameRoom>("GameUpdated", (room) =>
+        {
+            CurrentRoom = room;
+            StateHasChanged();
+        });
+    }
+
+    private async Task Start()
+    {
+        if (Hub is null)
+        {
+            return;
+        }
+
+        if (CurrentRoom is null)
+        {
+            return;
+        }
+
+        await Hub.InvokeAsync("StartGame", CurrentRoom.ID);
     }
 }
