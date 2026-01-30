@@ -1,5 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+builder.AddDockerComposeEnvironment("environment");
+
 var apiService = builder.AddProject<Projects.aspire_ApiService>("apiservice")
     .WithHttpHealthCheck("/health");
 
